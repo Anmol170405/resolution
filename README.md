@@ -2,7 +2,7 @@
 
 **Live Demo → [resolutionai.netlify.app](https://resolutionai.netlify.app)**
 
-An interactive automated theorem prover built for the CO3 Artificial Intelligence lab experiment. Runs entirely in the browser — no installation, no server, no dependencies.
+An interactive automated theorem prover built for the using Artificial Intelligence. Runs entirely in the browser, no installation, no server, no dependencies.
 
 ---
 
@@ -13,13 +13,6 @@ Resolution AI proves logical statements automatically using the **Resolution inf
 The entire proof is shown step by step so you can follow exactly how the machine reasoned from facts to conclusion.
 
 ---
-
-## Live Demo
-
-**[resolutionai.netlify.app](https://resolutionai.netlify.app)**
-
-Open it in any browser. No login, no install, works on mobile too.
-
 ---
 
 ## Features
@@ -137,4 +130,4 @@ resolution/
 
 ---
 
-Created by **Anmol Rai** · CO3 — Artificial Intelligence Lab
+Created by **Anmol Rai** · Artificial Intelligence
