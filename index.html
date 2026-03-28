@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Resolution AI — Anmol Rai | CO3</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0305;--surf:#1a0407;--raised:#240609;
+  --inp:#2c070b;--bord:#4a0e14;--acc:#CD1C18;
+  --sal:#FFA896;--drk:#9B1313;--dep:#38000A;
+  --txt:#FFE8E4;--mut:#B88888;--fnt:#5a3030;
+  --grn:#6FCF80;--wht:#FFF5F3;
+}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--txt);font-family:'Courier New',monospace;display:flex;flex-direction:column}
+/* NAV */
+nav{background:var(--dep);border-bottom:2px solid var(--acc);height:48px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.logo{color:var(--acc);font-size:14px;font-weight:700;letter-spacing:3px}
+.badge{background:var(--acc);color:#fff;padding:3px 12px;font-size:10px;font-weight:700;letter-spacing:1px}
+/* HERO */
+.hero{background:linear-gradient(180deg,var(--dep) 0%,var(--bg) 100%);padding:18px 16px 14px;text-align:center;border-bottom:1px solid var(--bord);flex-shrink:0}
+.ascii{color:var(--acc);font-size:clamp(4px,.85vw,10px);line-height:1.22;display:inline-block;text-align:left;margin-bottom:10px;white-space:pre}
+h1{color:var(--sal);font-size:clamp(13px,2vw,20px);letter-spacing:2px;margin-bottom:4px}
+.sub{color:var(--mut);font-size:11px;margin-bottom:10px}
+.chips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.chip{background:var(--raised);border:1px solid var(--bord);color:var(--sal);padding:3px 10px;font-size:10px;letter-spacing:1px}
+/* LAYOUT */
+.body{display:flex;flex:1;overflow:hidden;min-height:0}
+/* LEFT */
+.left{width:310px;flex-shrink:0;background:var(--surf);border-right:1px solid var(--bord);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+.sec{padding:10px 12px 8px;border-bottom:1px solid var(--bord)}
+.sec:last-child{border-bottom:none;flex:1;display:flex;flex-direction:column}
+.slbl{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--mut);margin-bottom:7px;text-transform:uppercase}
+/* presets */
+.pbtns{display:flex;flex-direction:column;gap:4px}
+.pbtn{background:var(--raised);border:1px solid var(--bord);color:var(--txt);padding:8px 10px;font-family:'Courier New',monospace;font-size:11px;text-align:left;cursor:pointer;width:100%;transition:border-color .12s,background .12s}
+.pbtn:hover{border-color:var(--sal);background:var(--inp)}
+.pbtn.active{border-color:var(--acc);color:var(--sal)}
+.pbtn small{display:block;color:var(--fnt);font-size:9px;margin-top:1px}
+/* clause list */
+.clist{background:var(--raised);border:1px solid var(--bord);padding:6px 8px;font-size:10px;line-height:2;min-height:60px;max-height:160px;overflow-y:auto;flex-shrink:0}
+.ci{color:var(--txt)}.ix{color:var(--fnt)}.ng{color:var(--acc)}
+/* inputs */
+.ginp{width:100%;background:var(--inp);border:1px solid var(--acc);color:var(--acc);font-family:'Courier New',monospace;font-size:11px;padding:6px 8px;outline:none;margin-top:4px}
+.ginp::placeholder{color:var(--fnt)}
+.cinp{width:100%;background:var(--inp);border:1px solid var(--bord);color:var(--sal);font-family:'Courier New',monospace;font-size:11px;padding:6px 8px;outline:none;margin-bottom:5px}
+.cinp:focus{border-color:var(--sal)}
+.syms{display:flex;gap:5px;margin-bottom:5px;flex-wrap:wrap}
+.sym{background:var(--raised);border:1px solid var(--fnt);color:var(--mut);font-size:13px;padding:3px 8px;cursor:pointer;font-family:'Courier New',monospace}
+.sym:hover{border-color:var(--sal);color:var(--sal)}
+.addbtn{background:var(--raised);border:1px solid var(--sal);color:var(--sal);font-family:'Courier New',monospace;font-size:10px;padding:5px 12px;cursor:pointer}
+.addbtn:hover{background:var(--inp)}
+/* actions */
+.acts{padding:8px 12px;background:var(--dep);border-top:1px solid var(--bord);display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+.btn{font-family:'Courier New',monospace;font-size:11px;font-weight:700;padding:7px 14px;border:1px solid;cursor:pointer;letter-spacing:.5px;transition:opacity .12s,background .12s}
+.bp{background:var(--acc);border-color:var(--acc);color:#fff}.bp:hover{opacity:.85}
+.br{background:transparent;border-color:var(--drk);color:var(--mut)}.br:hover{background:var(--raised)}
+/* RIGHT */
+.right{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.rh{background:var(--dep);padding:10px 16px;border-bottom:1px solid var(--bord);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.rt{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--mut)}
+.sp{font-size:10px;font-weight:700;color:var(--sal);letter-spacing:1px}
+.sp.ok{color:var(--grn)}.sp.fail{color:var(--acc)}
+/* progress */
+.pb{height:3px;background:var(--raised);display:none;flex-shrink:0}
+.pb.on{display:block}
+.pbi{height:100%;width:25%;background:var(--acc);animation:sl 0.9s linear infinite}
+@keyframes sl{0%{transform:translateX(-100%)}100%{transform:translateX(500%)}}
+/* banner */
+.ban{padding:8px 16px;font-weight:700;font-size:12px;letter-spacing:1px;text-align:center;display:none;flex-shrink:0}
+.ban.show{display:block}
+.ban.ok{background:var(--grn);color:#0a1a0c}
+.ban.fail{background:var(--acc);color:#fff}
+/* proof output */
+.out{flex:1;overflow-y:auto;padding:14px 16px;font-size:11px;line-height:1.9;background:var(--surf)}
+.out:empty::before{content:"Select a preset or add clauses, then press PROVE";color:var(--fnt);font-style:italic}
+/* proof tokens */
+.ph{color:var(--acc);font-weight:700;font-size:12px;border-bottom:1px solid var(--bord);padding-bottom:5px;margin-bottom:12px}
+.pi{color:var(--sal);font-weight:700;margin-bottom:3px}
+.pc{color:var(--mut);padding-left:2px}
+.pn{color:var(--acc)}
+.psl{color:var(--fnt);margin-top:8px}
+.pse{color:var(--acc);font-weight:700;margin-top:8px}
+.ppq{color:var(--fnt);padding-left:14px}
+.pres{color:var(--sal);font-weight:700;padding-left:14px}
+.pmt{color:var(--acc);font-weight:700;padding-left:14px;font-size:12px}
+.pdv{border:none;border-top:1px solid var(--bord);margin:12px 0}
+.pok{color:var(--grn);font-weight:700;font-size:13px;margin-top:3px}
+.pfl{color:var(--acc);font-weight:700;font-size:13px;margin-top:3px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--surf)}
+::-webkit-scrollbar-thumb{background:var(--bord)}
+footer{background:var(--dep);border-top:1px solid var(--bord);padding:7px 16px;text-align:center;color:var(--fnt);font-size:10px;flex-shrink:0}
+footer span{color:var(--sal)}
+@media(max-width:720px){
+  html,body{overflow:auto;height:auto}
+  .body{flex-direction:column;overflow:visible}
+  .left{width:100%;max-height:none;overflow:visible}
+  .right{min-height:60vh}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">◈ RESOLUTION AI</div>
+  <span class="badge">✦ ANMOL RAI · CO3</span>
+</nav>
+
+<div class="hero">
+  <pre class="ascii">██████╗ ███████╗███████╗ ██████╗ ██╗     ██╗   ██╗████████╗██╗ ██████╗ ███╗  ██╗
+██╔══██╗██╔════╝██╔════╝██╔═══██╗██║     ██║   ██║╚══██╔══╝██║██╔═══██╗████╗ ██║
+██████╔╝█████╗  ███████╗██║   ██║██║     ██║   ██║   ██║   ██║██║   ██║██╔██╗██║
+██╔══██╗██╔══╝  ╚════██║██║   ██║██║     ██║   ██║   ██║   ██║██║   ██║██║╚████║
+██║  ██║███████╗███████║╚██████╔╝███████╗╚██████╔╝   ██║   ██║╚██████╔╝██║ ╚███║
+╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚══════╝╚═════╝    ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚══╝</pre>
+  <h1>Resolution in Artificial Intelligence</h1>
+  <p class="sub">CO3 · First-Order Logic · CNF · Proof by Contradiction · Runs in your browser — no install needed</p>
+  <div class="chips">
+    <span class="chip">🧠 FOL + CNF</span>
+    <span class="chip">⚡ Pure JS</span>
+    <span class="chip">🔁 Zero Dependencies</span>
+    <span class="chip">💻 Browser Native</span>
+  </div>
+</div>
+
+<div class="body">
+
+  <!-- LEFT PANEL -->
+  <div class="left">
+
+    <div class="sec">
+      <div class="slbl">Preset Problems</div>
+      <div class="pbtns" id="pbtns">
+        <button class="pbtn active" onclick="load('west',this)">1 · West is a Criminal<small>Arms dealing → hostile nation</small></button>
+        <button class="pbtn" onclick="load('socrates',this)">2 · Socrates is Mortal<small>Classic syllogism</small></button>
+        <button class="pbtn" onclick="load('food',this)">3 · John Likes All Food<small>Generalisation → instance</small></button>
+        <button class="pbtn" onclick="load('anmol',this)">4 · Anmol is a Coder ✦<small>Student + AI + Projects → Coder</small></button>
+        <button class="pbtn" onclick="load('custom',this)">5 · Custom Problem<small>Enter your own CNF clauses</small></button>
+      </div>
+    </div>
+
+    <div class="sec" id="carea" style="display:none">
+      <div class="slbl">Add Custom Clause</div>
+      <input class="cinp" id="ci" placeholder="e.g.  ¬Human(Socrates) ∨ Mortal(Socrates)" onkeydown="if(event.key==='Enter')addC()"/>
+      <div class="syms">
+        <button class="sym" onclick="ins('∨')">∨</button>
+        <button class="sym" onclick="ins('¬')">¬</button>
+        <button class="sym" onclick="ins('∀')">∀</button>
+        <button class="sym" onclick="ins('∃')">∃</button>
+        <button class="sym" onclick="ins('∧')">∧</button>
+        <button class="sym" onclick="ins('→')">→</button>
+      </div>
+      <button class="addbtn" onclick="addC()">＋ Add Clause</button>
+    </div>
+
+    <div class="sec" style="flex:1;display:flex;flex-direction:column">
+      <div class="slbl">CNF Clauses</div>
+      <div class="clist" id="clist"><span style="color:var(--fnt)">Load a preset to begin</span></div>
+      <div class="slbl" style="margin-top:9px">Negated Goal</div>
+      <input class="ginp" id="ng" placeholder="e.g.  ¬Criminal(West)" oninput="renderC()"/>
+    </div>
+
+    <div class="acts">
+      <button class="btn bp" onclick="runProof()">▶ PROVE</button>
+      <button class="btn br" onclick="resetP()">⟳ RESET</button>
+      <button class="btn br" onclick="clearAll()">✕ CLEAR</button>
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right">
+    <div class="rh">
+      <span class="rt">◈ RESOLUTION PROOF STEPS</span>
+      <span class="sp" id="sp">● READY</span>
+    </div>
+    <div class="pb" id="pb"><div class="pbi"></div></div>
+    <div class="ban" id="ban"></div>
+    <div class="out" id="out"></div>
+  </div>
+
+</div>
+
+<footer>CO3 — Resolution in AI &nbsp;·&nbsp; Created by <span>Anmol Rai</span> &nbsp;·&nbsp; FOL · CNF · Proof by Contradiction</footer>
+
+<script>
+const P={
+  west:{cls:["¬American(West) ∨ ¬Weapon(M1) ∨ ¬Sells(West,M1,Nano) ∨ ¬Hostile(Nano) ∨ Criminal(West)","Hostile(Nano)","American(West)","Missile(M1)","¬Missile(M1) ∨ Weapon(M1)","Sells(West,M1,Nano)","Weapon(M1)"],ng:"¬Criminal(West)"},
+  socrates:{cls:["¬Human(Socrates) ∨ Mortal(Socrates)","Human(Socrates)"],ng:"¬Mortal(Socrates)"},
+  food:{cls:["¬Food(Peanuts) ∨ Likes(John,Peanuts)","Food(Peanuts)"],ng:"¬Likes(John,Peanuts)"},
+  anmol:{cls:["¬Student(Anmol) ∨ ¬BuildsProjects(Anmol) ∨ ¬LearnsAI(Anmol) ∨ Coder(Anmol)","Student(Anmol)","BuildsProjects(Anmol)","LearnsAI(Anmol)"],ng:"¬Coder(Anmol)"},
+  custom:{cls:[],ng:""}
+};
+
+let cls=[],cur="west";
+
+function nm(c){return c.split("∨").map(l=>l.trim().replace(/\s*,\s*/g,",").replace(/\(\s+/g,"(").replace(/\s+\)/g,")")).join(" ∨ ");}
+
+function rp(c1,c2){
+  const l1=c1.split("∨").map(x=>x.trim());
+  const l2=c2.split("∨").map(x=>x.trim());
+  for(const lit of l1){
+    const co=lit.startsWith("¬")?lit.slice(1):"¬"+lit;
+    if(l2.includes(co)){
+      const rem=[...new Set([...l1.filter(x=>x!==lit),...l2.filter(x=>x!==co)])];
+      return rem.length?nm(rem.join(" ∨ ")):"⊥";
+    }
+  }
+  return null;
+}
+
+function prove(cl,ng){
+  let ws=cl.map(nm),n=nm(ng);
+  if(!ws.includes(n))ws.push(n);
+  const st=[{t:"INIT",ws:[...ws]}],seen=new Set(ws);
+  for(let i=0;i<300;i++){
+    const nw=[];
+    for(let a=0;a<ws.length;a++){
+      for(let b=a+1;b<ws.length;b++){
+        const r=rp(ws[a],ws[b]);
+        if(r!==null){
+          const t=r==="⊥"?"MT":"ST";
+          st.push({t,c1:ws[a],c2:ws[b],r});
+          if(r==="⊥"){st.push({t:"OK"});return{ok:true,st};}
+          if(!seen.has(r)){nw.push(r);seen.add(r);}
+        }
+      }
+    }
+    if(!nw.length){st.push({t:"FAIL"});return{ok:false,st};}
+    ws=ws.concat(nw);
+  }
+  st.push({t:"FAIL"});return{ok:false,st};
+}
+
+function load(k,btn){
+  cur=k;
+  document.querySelectorAll(".pbtn").forEach(b=>b.classList.remove("active"));
+  if(btn)btn.classList.add("active");
+  document.getElementById("carea").style.display=k==="custom"?"block":"none";
+  cls=[...P[k].cls];
+  document.getElementById("ng").value=P[k].ng;
+  renderC();clearOut();setSp("● READY","");
+}
+
+function renderC(){
+  const el=document.getElementById("clist"),ng=document.getElementById("ng").value.trim();
+  if(!cls.length&&!ng){el.innerHTML='<span style="color:var(--fnt)">No clauses yet</span>';return;}
+  el.innerHTML=cls.map((c,i)=>`<div class="ci"><span class="ix">[${i+1}]</span>  ${esc(c)}</div>`).join("")
+    +(ng?`<div class="ci ng">[¬G]  ${esc(ng)}  <span style="color:var(--fnt)">← Negated Goal</span></div>`:"");
+}
+
+function addC(){
+  const inp=document.getElementById("ci"),v=inp.value.trim();
+  if(!v)return;cls.push(v);inp.value="";renderC();
+}
+
+function ins(s){
+  const inp=document.getElementById("ci"),st=inp.selectionStart,en=inp.selectionEnd;
+  inp.value=inp.value.slice(0,st)+s+inp.value.slice(en);
+  inp.selectionStart=inp.selectionEnd=st+s.length;inp.focus();
+}
+
+function clearAll(){cls=[];document.getElementById("ng").value="";renderC();clearOut();setSp("● READY","");}
+
+function resetP(){
+  const btns=document.querySelectorAll(".pbtn");
+  const idx=["west","socrates","food","anmol","custom"].indexOf(cur);
+  load(cur,btns[idx]);
+}
+
+function clearOut(){
+  document.getElementById("out").innerHTML="";
+  const b=document.getElementById("ban");b.className="ban";b.textContent="";
+}
+
+function setSp(t,c){const el=document.getElementById("sp");el.textContent=t;el.className="sp "+c;}
+
+function runProof(){
+  const ng=document.getElementById("ng").value.trim();
+  if(!cls.length){alert("Add at least one CNF clause first.");return;}
+  if(!ng){alert("Enter the negated goal first.");return;}
+  clearOut();setSp("⟳ PROVING…","");
+  document.getElementById("pb").className="pb on";
+  setTimeout(()=>{
+    const{ok,st}=prove(cls,ng);
+    document.getElementById("pb").className="pb";
+    render(ok,st,ng);
+    setSp(ok?"● PROVED":"● FAILED",ok?"ok":"fail");
+    const b=document.getElementById("ban");
+    b.textContent=ok?"  ✔  GOAL PROVED — Contradiction Derived!":"  ✘  GOAL NOT PROVED";
+    b.className="ban show "+(ok?"ok":"fail");
+  },50);
+}
+
+function render(ok,st,ng){
+  const out=document.getElementById("out"),ts=new Date().toLocaleTimeString();
+  let h=`<div class="ph">PROOF — ${ts}</div>`;
+  let sn=0;
+  for(const s of st){
+    if(s.t==="INIT"){
+      h+=`<div class="pi">◆ INITIAL STATE</div>`;
+      s.ws.forEach((c,i)=>{
+        const isNg=c===nm(ng);
+        h+=`<div class="pc ${isNg?"pn":""}"><span style="color:var(--fnt)">[${isNg?"¬G":i+1}]</span>  ${esc(c)}`+(isNg?` <span style="color:var(--fnt)">← negated goal</span>`:"")+`</div>`;
+      });
+      h+=`<br>`;
+    }else if(s.t==="ST"){
+      sn++;
+      h+=`<div class="psl">─ step ${sn}</div><div class="ppq">P: ${esc(s.c1)}</div><div class="ppq">Q: ${esc(s.c2)}</div><div class="pres">⇒ ${esc(s.r)}</div><br>`;
+    }else if(s.t==="MT"){
+      sn++;
+      h+=`<div class="pse">─ step ${sn}: EMPTY CLAUSE</div><div class="ppq">P: ${esc(s.c1)}</div><div class="ppq">Q: ${esc(s.c2)}</div><div class="pmt">⇒ ⊥ &nbsp; (Contradiction!)</div><br>`;
+    }else if(s.t==="OK"){
+      h+=`<hr class="pdv"><div class="pok">✔ &nbsp;GOAL PROVED — contradiction found.</div>`;
+    }else if(s.t==="FAIL"){
+      h+=`<hr class="pdv"><div class="pfl">✘ &nbsp;GOAL NOT PROVED — no new clauses.</div>`;
+    }
+  }
+  out.innerHTML=h;out.scrollTop=out.scrollHeight;
+}
+
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+// init
+load("west",document.querySelector(".pbtn"));
+document.getElementById("ng").addEventListener("input",renderC);
+</script>
+</body>
+</html>
